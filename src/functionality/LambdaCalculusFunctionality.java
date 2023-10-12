@@ -25,7 +25,8 @@ public class LambdaCalculusFunctionality {
             int constant = Integer.parseInt(operation.substring(operation.indexOf('x') + 2)); // Get the constant value
 
             // Evaluate the expression
-            int result = (sign == '+') ? (coefficient * xValue + constant) : (coefficient * xValue - constant);
+            int result;
+            result = (sign == '+') ? (coefficient * xValue + constant) : (coefficient * xValue - constant);
 
             return result;
         } else {
