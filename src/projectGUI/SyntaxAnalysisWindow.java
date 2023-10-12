@@ -55,6 +55,19 @@ public class SyntaxAnalysisWindow extends BaseWindow {
 
         topLeftPanel.add(homeButton);
 
+        // Add the top left panel to the content pane
+        syntaxAnalysisWindow.add(topLeftPanel, BorderLayout.NORTH);
+
+        // Add ActionListener to the homeButton
+        homeButton.addActionListener(e -> {
+            MyGUI mainMenu = new MyGUI(syntaxAnalysisWindow);
+            syntaxAnalysisWindow.dispose(); // Close the current window
+
+            mainMenu.setVisible(true); // Bring back the main menu
+        });
+
+        syntaxAnalysisWindow.setVisible(true);
+
     }
 
 }
