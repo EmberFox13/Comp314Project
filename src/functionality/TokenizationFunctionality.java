@@ -53,7 +53,7 @@ public class TokenizationFunctionality {
                     } else if (Character.isWhitespace(c)) {
                         currentToken.setLength(0);
                         currentToken.append(c);
-                        charQueue.poll();
+                        //charQueue.poll();
                         currentState = State.WHITESPACE;
 
                     } else {
@@ -84,10 +84,8 @@ public class TokenizationFunctionality {
 
                 } case WHITESPACE -> {
                     if (Character.isWhitespace(c)) {
-                        currentToken.append(c);
                         charQueue.poll();
                     } else {
-                        tokens.add(currentToken.toString());
                         currentState = State.START;
 
                     }
@@ -133,7 +131,7 @@ public class TokenizationFunctionality {
     }
 
     public static void main(String[] args) {
-        String inputString = "System.out.println(\"Hello World!!!\")";
+        String inputString = "System.out.println(\"Hello World!!!\");";
         List<String> tokens = tokenizeString(inputString);
 
         System.out.println("Tokens: " + tokens);
