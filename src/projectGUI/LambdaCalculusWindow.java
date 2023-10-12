@@ -1,5 +1,4 @@
 package projectGUI;
-import functionality.TokenizationFunctionality;
 import functionality.LambdaCalculusFunctionality;
 
 import javax.swing.*;
@@ -185,7 +184,7 @@ public class LambdaCalculusWindow extends BaseWindow {
     private void updateTextBox() {
         String input = inputTextField.getText();
         int answer = LambdaCalculusFunctionality.evaluateLambdaExpression(input);
-        output.setText("The answer is: " + String.valueOf(answer));
+        output.setText("The answer is: " + answer);
     }
 }
 
