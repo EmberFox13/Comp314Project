@@ -34,6 +34,12 @@ public class LambdaCalculusFunctionality {
         }
     }
 
+    public static void main(String[] args) {
+        String input = "(3x-4)10";
+        int result = evaluateLambdaExpression(input);
+        System.out.println(result);
+    }
+
 
 
 }
