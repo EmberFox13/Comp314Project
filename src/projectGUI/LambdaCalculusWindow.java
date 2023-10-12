@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent;
 
 
 public class LambdaCalculusWindow extends BaseWindow {
-    private static final Color BACKGROUND_COLOR = Color.decode("#C41E3A");
+    private static final Color BACKGROUND_COLOR = Color.decode("#0096FF");
     private JTextField inputTextField;
     private JTextField output; // Added JTextField for output
     private JPanel topPanel;
