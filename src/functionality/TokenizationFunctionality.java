@@ -123,7 +123,7 @@ public class TokenizationFunctionality {
 
     }
 
-    private static boolean isOperator(char c) {
+    static boolean isOperator(char c) {
         return c == '+' || c == '-' || c == '*' || c == '/' || c == '=' || c == ';'
                 || c == '(' || c == ')' || c == '.' || c == '%' || c == '!' || c == '<'
                 || c == '>' || c == '|' || c == '&';
