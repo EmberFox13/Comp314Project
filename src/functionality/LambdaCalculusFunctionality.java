@@ -7,7 +7,7 @@ public class LambdaCalculusFunctionality {
 
     public static int evaluateLambdaExpression(String input) {
         // Define a regular expression pattern to match the input format
-        Pattern pattern = Pattern.compile("\\(([-+]?\\d*x[+-]\\d+)\\)(\\d+)");
+        Pattern pattern = Pattern.compile("\\(([\\-+]?\\d*x[\\-+]?\\d*)\\)(\\d+)");
         Matcher matcher = pattern.matcher(input);
 
         if (matcher.matches()) {
@@ -16,17 +16,13 @@ public class LambdaCalculusFunctionality {
             int xValue = Integer.parseInt(matcher.group(2)); // e.g., 10 or 2
 
             // Parse the operation to separate the coefficient, 'x', and the constant
-            int coefficient = 1; // Default coefficient if not specified
-            char operator = operation.charAt(0); // Get the first character which can be '+' or '-'
-            if (Character.isDigit(operator)) {
-                coefficient = Integer.parseInt(operation.substring(0, operation.indexOf('x')));
-            }
-            char sign = operation.charAt(operation.indexOf('x') + 1); // Get the operator (+ or -)
-            int constant = Integer.parseInt(operation.substring(operation.indexOf('x') + 2)); // Get the constant value
+            String[] parts = operation.split("x");
+            int coefficient = parts.length > 1 ? Integer.parseInt(parts[0]) : 1;
+            char sign = (operation.indexOf('+') != -1) ? '+' : '-';
+            int constant = Integer.parseInt(parts[1].replaceAll("[\\-+]", ""));
 
             // Evaluate the expression
-            int result;
-            result = (sign == '+') ? (coefficient * xValue + constant) : (coefficient * xValue - constant);
+            int result = (sign == '+') ? (coefficient * xValue + constant) : (coefficient * xValue - constant);
 
             return result;
         } else {
@@ -35,11 +31,12 @@ public class LambdaCalculusFunctionality {
     }
 
     public static void main(String[] args) {
-        String input = "(3x-4)10";
-        int result = evaluateLambdaExpression(input);
-        System.out.println(result);
+        String input1 = "(3x-4)10";
+        int result1 = evaluateLambdaExpression(input1);
+        System.out.println("Result 1: " + result1);
+
+        String input2 = "(-2x+7)5";
+        int result2 = evaluateLambdaExpression(input2);
+        System.out.println("Result 2: " + result2);
     }
-
-
-
 }

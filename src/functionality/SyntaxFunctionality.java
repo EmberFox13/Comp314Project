@@ -4,47 +4,51 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static functionality.TokenizationFunctionality.isOperator;
-
 public class SyntaxFunctionality {
 
-    private static final Set<String> VALID_DATA_TYPES = Set.of("int",
-            "String", "char", "double", "float", "boolean");
+    private static final Set<String> VALID_DATA_TYPES = Set.of("int", "String", "char", "double", "float", "boolean");
+    private static final Set<String> OPERATORS = Set.of("+", "-", "*", "/", "=", "<", ">", "!", "&", "|");
+    private static final Set<String> KEYWORDS = Set.of("if", "else", "while", "switch", "System.out.print"); // Add keywords here
 
-    enum State {
+    enum TokenType {
         START,
         STRING,
         VALUE,
         VARIABLES,
-        OPERATOR
-
+        OPERATOR,
+        COMMENT,
+        KEYWORD // Add KEYWORD token type
     }
 
     public static List<String> analyzeTokens(String tokens) {
         List<String> syntax = new ArrayList<>();
         StringBuilder currentSyntax = new StringBuilder();
-        SyntaxFunctionality.State currentState = SyntaxFunctionality.State.START;
+        TokenType currentTokenType = TokenType.START;
+        boolean inEscapeMode = false;
 
         for (char c : tokens.toCharArray()) {
-
-            switch (currentState) {
+            switch (currentTokenType) {
                 case START:
-                    if (Character.isLetter(c)) {
-                        currentState = State.VARIABLES;
+                    if (c == '/') {
+                        currentTokenType = TokenType.COMMENT;
                         currentSyntax.append(c);
-
+                    } else if (Character.isLetter(c)) {
+                        currentTokenType = TokenType.VARIABLES;
+                        currentSyntax.append(c);
                     } else if (isOperator(c)) {
-                        currentState = State.OPERATOR;
+                        currentTokenType = TokenType.OPERATOR;
                         currentSyntax.append(c);
-
                     } else if (Character.isDigit(c)) {
-                        currentState = State.VALUE;
+                        currentTokenType = TokenType.VALUE;
                         currentSyntax.append(c);
-
                     } else if (c == '"') {
-                        currentState = State.STRING;
+                        currentTokenType = TokenType.STRING;
                         currentSyntax.append(c);
-
+                    } else {
+                        // Handle invalid characters here
+                        syntax.add("Invalid Character: " + c);
+                        currentSyntax.setLength(0);
+                        currentTokenType = TokenType.START;
                     }
                     break;
 
@@ -52,32 +56,46 @@ public class SyntaxFunctionality {
                     if (Character.isLetterOrDigit(c) || c == '_') {
                         currentSyntax.append(c);
                     } else {
-                        if (isDataType(currentSyntax.toString())) {
-                            syntax.add("Data Type: " + currentSyntax);
+                        String varName = currentSyntax.toString();
+                        if (Character.isDigit(varName.charAt(0)) || KEYWORDS.contains(varName)) {
+                            // Handle variables starting with a digit or being keywords
+                            syntax.add("Invalid Variable: " + varName);
+                        } else if (VALID_DATA_TYPES.contains(varName)) {
+                            syntax.add("Data Type: " + varName);
                         } else {
-                            syntax.add("Variable: " + currentSyntax);
+                            syntax.add("Variable: " + varName);
                         }
                         currentSyntax.setLength(0);
-                        currentState = State.START;
+                        currentTokenType = TokenType.START;
                     }
                     break;
 
                 case VALUE:
-                    if (Character.isDigit(c) || c == '.') {
+                    if (Character.isDigit(c) || (currentSyntax.length() > 0 && c == '.')) {
+                        currentSyntax.append(c);
+                    } else if (c == '"') {
+                        currentTokenType = TokenType.STRING;
                         currentSyntax.append(c);
                     } else {
                         syntax.add("Value: " + currentSyntax);
                         currentSyntax.setLength(0);
-                        currentState = State.START;
+                        currentTokenType = TokenType.START;
                     }
                     break;
 
                 case STRING:
-                    currentSyntax.append(c);
-                    if (c == '"') {
-                        syntax.add("String: " + currentSyntax);
-                        currentSyntax.setLength(0);
-                        currentState = State.START;
+                    if (inEscapeMode) {
+                        currentSyntax.append(c);
+                        inEscapeMode = false;
+                    } else {
+                        currentSyntax.append(c);
+                        if (c == '\\') {
+                            inEscapeMode = true;
+                        } else if (c == '"') {
+                            syntax.add("String: " + currentSyntax);
+                            currentSyntax.setLength(0);
+                            currentTokenType = TokenType.START;
+                        }
                     }
                     break;
 
@@ -87,42 +105,48 @@ public class SyntaxFunctionality {
                     } else {
                         syntax.add("Operator: " + currentSyntax);
                         currentSyntax.setLength(0);
-                        currentState = State.START;
+                        currentTokenType = TokenType.START;
+                    }
+                    break;
+
+                case COMMENT:
+                    currentSyntax.append(c);
+                    if (c == '\n') {
+                        syntax.add("Comment: " + currentSyntax);
+                        currentSyntax.setLength(0);
+                        currentTokenType = TokenType.START;
                     }
                     break;
             }
-
         }
 
-        // Add the last token if any
         if (!currentSyntax.isEmpty()) {
-            syntax.add(getTokenTypeLabel(currentState) + currentSyntax);
-
+            syntax.add(getTokenTypeLabel(currentTokenType) + currentSyntax);
         }
 
         return syntax;
     }
 
-    private static String getTokenTypeLabel(State currentState) {
-        return switch (currentState) {
+    private static String getTokenTypeLabel(TokenType currentTokenType) {
+        return switch (currentTokenType) {
             case VARIABLES -> "Variable: ";
             case VALUE -> "Value: ";
             case STRING -> "String: ";
             case OPERATOR -> "Operator: ";
+            case COMMENT -> "Comment: ";
+            case KEYWORD -> "Keyword: "; // Add case for KEYWORD
             default -> "Unrecognized";
         };
     }
 
-    static boolean isDataType(String token) {
-        return VALID_DATA_TYPES.contains(token);
-
+    private static boolean isOperator(char c) {
+        return OPERATORS.contains(String.valueOf(c));
     }
 
     public static void main(String[] args) {
-        String inputString = "int sum = num1 + 10;";
+        String inputString = "int sum = num1 + \"10\"; if (condition) { System.out.print(\"Hello\"); }"; // Add a keyword "if"
         List<String> analyzedTokens = analyzeTokens(inputString);
 
         System.out.println("Tokens: " + analyzedTokens);
     }
-
 }
