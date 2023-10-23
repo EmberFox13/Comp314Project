@@ -6,6 +6,8 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.util.List;
 import functionality.TokenizationFunctionality;
+import model.BaseWindow;
+
 import java.awt.event.KeyEvent;
 
 public class TokenizationWindow extends BaseWindow {

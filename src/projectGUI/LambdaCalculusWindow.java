@@ -1,5 +1,6 @@
 package projectGUI;
 import functionality.LambdaCalculusFunctionality;
+import model.BaseWindow;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

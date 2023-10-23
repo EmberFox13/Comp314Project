@@ -1,4 +1,4 @@
-package projectGUI;
+package model;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Path2D;
 
-class ECGPanel extends JPanel {
+public class ECGPanel extends JPanel {
     private final int[] data = {15, 15, 34, 32, 20, 15, -12, 175, -31, 20, 11, 17, 38, 32, 20, 15, -16, 200, -31, 5,
             19, 16, 34, 36, 20, 15, -13, 169, -36};
     private int index = 0;

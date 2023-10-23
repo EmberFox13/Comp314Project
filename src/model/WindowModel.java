@@ -1,4 +1,4 @@
-package projectGUI;
+package model;
 
 interface WindowModel {
     void openWindow();

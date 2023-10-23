@@ -7,8 +7,8 @@ import java.lang.Exception;
 
 public class LogIn {
     //create CreateLoginForm class to create login form
-//class extends JFrame to create a window where our component add
-//class implements ActionListener to perform an action on button click
+    //class extends JFrame to create a window where our component add
+    //class implements ActionListener to perform an action on button click
     static class CreateLoginForm extends JFrame implements ActionListener
     {
 
@@ -23,8 +23,6 @@ public class LogIn {
         CreateLoginForm()
         {
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
 
             newPanel = new JPanel(new GridBagLayout()) {
                 @Override
@@ -101,7 +99,7 @@ public class LogIn {
         public void actionPerformed(ActionEvent ae)     //pass action listener as a parameter
         {
             String userValue = textField1.getText();        //get user entered username from the textField1
-            String passValue = textField2.getText();        //get user entered pasword from the textField2
+            String passValue = textField2.getText();        //get user entered password from the textField2
 
             //check whether the credentials are authentic or not
             if (userValue.equals("Morgan@gmail.com") && passValue.equals("Morgan") || userValue.equals("GroupF@gmail.com") && passValue.equals("GroupF") ) {  //if authentic, navigate user to a new page
@@ -112,7 +110,7 @@ public class LogIn {
                     JLabel wel_label = new JLabel("Welcome: " + userValue);
 
                 });
-                SwingUtilities.invokeLater(() -> dispose());
+                SwingUtilities.invokeLater(this::dispose);
             }
 
             else{
@@ -125,7 +123,7 @@ public class LogIn {
     //create the main class
 
     //main() method start
-    public static void main(String arg[])
+    public static void main(String[] arg)
     {
 
         try {

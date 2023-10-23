@@ -48,7 +48,6 @@ public class SyntaxFunctionality {
                         // Handle invalid characters here
                         syntax.add("Invalid Character: " + c);
                         currentSyntax.setLength(0);
-                        currentTokenType = TokenType.START;
                     }
                     break;
 
@@ -71,7 +70,7 @@ public class SyntaxFunctionality {
                     break;
 
                 case VALUE:
-                    if (Character.isDigit(c) || (currentSyntax.length() > 0 && c == '.')) {
+                    if (Character.isDigit(c) || (!currentSyntax.isEmpty() && c == '.')) {
                         currentSyntax.append(c);
                     } else if (c == '"') {
                         currentTokenType = TokenType.STRING;
@@ -84,11 +83,10 @@ public class SyntaxFunctionality {
                     break;
 
                 case STRING:
+                    currentSyntax.append(c);
                     if (inEscapeMode) {
-                        currentSyntax.append(c);
                         inEscapeMode = false;
                     } else {
-                        currentSyntax.append(c);
                         if (c == '\\') {
                             inEscapeMode = true;
                         } else if (c == '"') {

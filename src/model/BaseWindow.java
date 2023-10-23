@@ -1,4 +1,6 @@
-package projectGUI;
+package model;
+
+import model.WindowModel;
 
 import javax.swing.*;
 

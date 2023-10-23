@@ -22,9 +22,8 @@ public class LambdaCalculusFunctionality {
             int constant = Integer.parseInt(parts[1].replaceAll("[\\-+]", ""));
 
             // Evaluate the expression
-            int result = (sign == '+') ? (coefficient * xValue + constant) : (coefficient * xValue - constant);
 
-            return result;
+            return (sign == '+') ? (coefficient * xValue + constant) : (coefficient * xValue - constant);
         } else {
             throw new IllegalArgumentException("Invalid input format. Please use the format ([+-]?nx[+-]m)p.");
         }
